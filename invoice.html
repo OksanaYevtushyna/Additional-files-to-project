@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="invoice.css">
+    <script src="https://kit.fontawesome.com/5da50cccee.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.0.943/build/pdf.min.js"></script>
+    <title>Invoice page</title>
+  </head>
+
+  <body>
+      <div class="main">
+          <header>
+              
+              <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="http://www.nordicbackoffice.lv/en"><img src="logo-nordic-backoffice.png" width="200" height="43" alt="NordicBackoffice"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                  <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#">Verifying</a>
+                    </li>
+                  </ul>
+
+
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                  <ul class="navbar-nav mr-auto mt-2 mt-lg-0"> 
+                  </ul>
+                  <form class="form-inline" action="index.html">
+                    <div class="form-group mb-2">
+                      <label for="staticEmail2" class="sr-only">Email</label>
+                      <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="username@com">
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Log out</button>
+                  </form>
+                </div>
+              </nav>
+          </header>
+          <div class="content">
+              <div class="container-fluid">
+                  <div class="row">
+                      <div class="col-lg-9">
+                          <div class="invoice-view">
+                              <div style="overflow: auto" class="invoice">
+                                  <canvas id="pdf-render" style="border: 1px solid black; margin-left: 10px; margin-top: 10px"></canvas>
+                              </div>
+                          </div>
+                          <div class="row bottom-bar">
+                              <div class="col-1"></div>
+                              <div class="col-1">
+                                  <div id="zoom_controls">  
+                                      <button id="zoom_in">+</button>
+                                      <button id="zoom_out">-</button>
+                                  </div>
+                              </div>
+                              <div class="col-2">
+                                  <button type="button" class="btn btn-primary btn-sm" id="prev-page"><i class="fas fa-arrow-circle-left"></i> Previous page</button>
+                              </div>
+                              <div class="col-2">
+                                  <button type="button" class="btn btn-secondary btn-sm" id="next-page">Next page <i class="fas fa-arrow-circle-right"></i></button>
+                              </div>
+                              <div class="col-3">
+                                  <input type="number">
+                                  <button id="numPage">GO</button>
+                              </div>
+                              <div class="col-3">
+                                  <span class="page-info">
+                                      Page <span id="page-num"></span> of <span id="page-count"></span>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-3">
+                          <div class="info">
+                              <div class="container">
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group first">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Supplier company name">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group first">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="IBAN">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-6">
+                                          <button type="button" class="btn btn-danger">Not verifiable</button>
+                                      </div>
+                                      <div class="col-6">
+                                          <button type="button" class="btn btn-warning">Wrong supplier</button>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group first">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Invoice nr">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Invoice date">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Due date">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="VAT">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <form>
+                                            <div class="form-group">
+                                              <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Total">
+                                            </div>
+                                          </form>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <div class="form-group">
+                                            <label for="exampleFormControlSelect1">Invoice type</label>
+                                            <select class="form-control" id="exampleFormControlSelect1">
+                                              <option>Invoice</option>
+                                              <option>Credit</option>
+                                              <option>Reminder</option>
+                                              <option>Noninvoice</option>
+                                            </select>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="row">
+                                      <div class="col-4">
+                                          <button type="button" class="btn btn-secondary previous">Previous</button>
+                                      </div>
+                                      <div class="col-4"></div>
+                                      <div class="col-4">
+                                          <button type="button" class="btn btn-secondary next">Next</button>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-6">
+                                          <p>X: <span id="x-value"></span></p>
+                                      </div>
+                                      <div class="col-6">
+                                          <p>Y: <span id="y-value"></span></p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+    
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/popper.js/dist/popper.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.min.js"></script>
+    <script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+    <script src="invoice.js"></script>
+        
+            
+  </body>
+</html>
